@@ -1,0 +1,18 @@
+CREATE FUNCTION getNthHighestSalary(N IN NUMBER) RETURN NUMBER IS
+RESULT NUMBER;
+BEGIN
+    SELECT SALARY INTO RESULT 
+    FROM (
+        SELECT SALARY, ROWNUM as rnum 
+        FROM (
+            SELECT DISTINCT SALARY 
+            FROM EMPLOYEE 
+            ORDER BY SALARY DESC
+        )
+    ) 
+    WHERE rnum = N; 
+    RETURN RESULT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN null;
+END;
